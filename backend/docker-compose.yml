@@ -1,0 +1,57 @@
+version: '3.7'
+
+# Networks
+networks:
+  # Internal network
+  internal:
+    driver: bridge
+
+# Volumes
+volumes:
+  # MySQL volume
+  mysql_data-aderyn_laravel:
+    driver: local
+
+# Services
+services:
+
+  # MySQL
+  mysql-aderyn_laravel:
+    image: mysql:5.7
+    container_name: mysql-aderyn_laravel
+    networks:
+      - internal
+    volumes:
+      - .:/var/www/app
+      - mysql_data-aderyn_laravel:/var/lib/mysql
+    working_dir: /var/www/app
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=database
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+    ports:
+      - "3306:3306"
+
+  # Nginx
+  nginx-aderyn_laravel:
+    image: webdevops/php-nginx:8.3
+    container_name: nginx-aderyn_laravel
+    networks:
+      - internal
+    depends_on:
+      - mysql-aderyn_laravel
+    links:
+      - mysql-aderyn_laravel
+    volumes:
+      - .:/var/www/app
+    working_dir: /var/www/app
+    environment:
+      - WEB_DOCUMENT_ROOT=/var/www/app/public
+      - PHP_DATE_TIMEZONE=UTC
+      - PHP_DISPLAY_ERRORS=0
+      - WEB_DOCUMENT_INDEX=index.php
+    expose:
+      - 9090
+    ports:
+      - "8080:80"
