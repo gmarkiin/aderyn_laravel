@@ -58,7 +58,7 @@ mysql: ## Enter bash mysql container
 ##@ Database tools
 
 migration: ## Create migration file
-	docker compose exec --user application nginx-aderyn_laravel bash -c "composer create-project laravel/laravel backend"
+	docker compose exec --user application nginx-aderyn_laravel bash -c "$(name)"
 
 migrate: ## Perform migrations
 	docker compose exec --user application nginx-aderyn_laravel php artisan migrate
