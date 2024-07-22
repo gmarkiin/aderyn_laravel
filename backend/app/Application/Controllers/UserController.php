@@ -15,7 +15,6 @@ class UserController extends Controller
 
     public function create(CreateUserDTO $request): JsonResponse
     {
-        //TODO Acho que da pra melhorar
         $user = $request->mountObject();
 
         $this->userService->user = $user;
