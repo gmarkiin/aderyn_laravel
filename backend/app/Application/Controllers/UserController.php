@@ -2,29 +2,24 @@
 
 namespace App\Application\Controllers;
 
-use App\Domain\User\Repositories\UserRepositoryInterface;
-use App\Application\Requests\UserCreatePost;
-use App\Application\Transformers\User\UserApplicationTransformer;
+use App\Application\DTO\User\CreateUserDTO;
+use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    private readonly UserRepositoryInterface $userRepository;
-
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(private readonly UserService $userService)
     {
-        $this->userRepository = $userRepository;
     }
 
-    public function create(UserCreatePost $request): JsonResponse
+    public function create(CreateUserDTO $request): JsonResponse
     {
         //TODO Acho que da pra melhorar
-        $data = (object)$request->validated();
-        $user = UserApplicationTransformer::createUser($data);
+        $user = $request->mountObject();
 
-        $this->userRepository->create($user);
-        $this->userRepository->createAuthToken($user);
+        $this->userService->user = $user;
+        $this->userService->createUser();
 
         return response()->json(['token' => $user->token], Response::HTTP_CREATED);
     }
