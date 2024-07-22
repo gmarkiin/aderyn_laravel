@@ -2,17 +2,18 @@
 
 namespace App\Application\DTO\User;
 
-use App\Application\DTO\DTOBase;
+use App\Application\DTO\DTOInterface;
 use App\Domain\User\Entities\User;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserDTO extends DTOBase
+class CreateUserDTO extends FormRequest implements DTOInterface
 {
-    protected function isAuthorize(): bool
+    public function isAuthorize(): bool
     {
         return true;
     }
 
-    protected function getRules(): array
+    public function getRules(): array
     {
        return [
            'name' => 'required|min:3|string',
@@ -22,7 +23,7 @@ class CreateUserDTO extends DTOBase
        ];
     }
 
-    protected function getMessages(): array
+    public function getMessages(): array
     {
         return [
             'name.min' => 'O nome precisa ter pelo menos 3 caracteres',
