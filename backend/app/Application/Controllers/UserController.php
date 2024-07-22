@@ -24,6 +24,7 @@ class UserController extends Controller
         $user = UserApplicationTransformer::createUser($data);
 
         $this->userRepository->create($user);
+        $this->userRepository->createAuthToken($user);
 
         return response()->json(['token' => $user->token], Response::HTTP_CREATED);
     }

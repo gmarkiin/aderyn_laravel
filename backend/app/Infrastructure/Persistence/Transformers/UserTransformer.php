@@ -7,13 +7,14 @@ use App\Infrastructure\Persistence\Models\EloquentUser;
 
 class UserTransformer
 {
-    public static function toEloquentModel(User $user): EloquentUser
+    public static function toEloquentModel(User $user): void
     {
         $eloquentUser = new EloquentUser();
         $eloquentUser->name = $user->name;
         $eloquentUser->username = $user->username;
         $eloquentUser->email = $user->email;
         $eloquentUser->password = $user->password;
-        return $eloquentUser;
+
+        $user->persistence = $eloquentUser;
     }
 }

@@ -10,8 +10,12 @@ class EloquentUserRepository implements UserRepositoryInterface
 {
     public function create(User $user): void
     {
-        $eloquentUser = UserTransformer::toEloquentModel($user);
-        $eloquentUser->save();
-        $user->token = $eloquentUser->createToken('apiAuthToken')->plainTextToken;
+        UserTransformer::toEloquentModel($user);
+        $user->persistence->save();
+    }
+
+    public function createAuthToken(User $user): void
+    {
+        $user->token = $user->persistence->createToken('apiAuthToken')->plainTextToken;
     }
 }
