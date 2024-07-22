@@ -5,16 +5,17 @@ namespace App\Infrastructure\Persistence\Transformers;
 use App\Domain\User\Entities\User;
 use App\Infrastructure\Persistence\Models\EloquentUser;
 
-class UserTransformer
+readonly class UserTransformer
 {
-    public static function toEloquentModel(User $user): void
+    public function __construct(private EloquentUser $eloquent)
     {
-        $eloquentUser = new EloquentUser();
-        $eloquentUser->name = $user->name;
-        $eloquentUser->username = $user->username;
-        $eloquentUser->email = $user->email;
-        $eloquentUser->password = $user->password;
+    }
 
-        $user->persistence = $eloquentUser;
+    public function toEloquentModel(User $user): void
+    {
+        $this->eloquent->name = $user->name;
+        $this->eloquent->username = $user->username;
+        $this->eloquent->email = $user->email;
+        $this->eloquent->password = $user->password;
     }
 }
