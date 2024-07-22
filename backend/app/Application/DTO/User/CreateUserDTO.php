@@ -8,12 +8,12 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUserDTO extends FormRequest implements DTOInterface
 {
-    public function isAuthorize(): bool
+    public function authorize(): bool
     {
         return true;
     }
 
-    public function getRules(): array
+    public function rules(): array
     {
        return [
            'name' => 'required|min:3|string',
@@ -23,7 +23,7 @@ class CreateUserDTO extends FormRequest implements DTOInterface
        ];
     }
 
-    public function getMessages(): array
+    public function messages(): array
     {
         return [
             'name.min' => 'O nome precisa ter pelo menos 3 caracteres',
